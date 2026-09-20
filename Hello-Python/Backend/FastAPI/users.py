@@ -36,5 +36,9 @@ async def users():
 @app.get("/users/{id}")
 async def users(id: int):
     users = filter(lambda user: user.id == id, users_list)
-    return list(users)
+
+    try:
+        return list(users)[0]
+    except:
+        return {"error": "No se ha encontrado el usuario"}
 
