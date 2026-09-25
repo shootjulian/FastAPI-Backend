@@ -33,6 +33,7 @@ async def userclass():
 async def users():
     return users_list
 
+#Path
 @app.get("/users/{id}")
 async def users(id: int):
     users = filter(lambda user: user.id == id, users_list)
@@ -42,3 +43,14 @@ async def users(id: int):
     except:
         return {"error": "No se ha encontrado el usuario"}
 
+#Query
+@app.get("/user")
+async def users(id: int):
+    return serach_user(id)
+
+def serach_user(id: int):
+    users = filter(lambda user: user.id == id, users_list)
+    try:
+        return list(users)[0]
+    except:
+            return {"error": "No se ha encontrado el usuario"}
