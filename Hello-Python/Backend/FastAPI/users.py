@@ -48,9 +48,21 @@ async def users(id: int):
 async def users(id: int):
     return serach_user(id)
 
+@app.post("/createuser") #Mejor singular, para indicar que se va a crear un solo user
+async def user(user: User):
+    users_list.append(user)
+
+    return {
+        "message": "Usuario creado exitosamente, gracias por tu JSON que pasamos a objeto User",
+        "user": user
+    }
+
+
 def serach_user(id: int):
     users = filter(lambda user: user.id == id, users_list)
     try:
         return list(users)[0]
     except:
             return {"error": "No se ha encontrado el usuario"}
+
+
