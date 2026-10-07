@@ -48,14 +48,53 @@ async def users(id: int):
 async def users(id: int):
     return serach_user(id)
 
+
+#Operacion con peticion POST
 @app.post("/createuser") #Mejor singular, para indicar que se va a crear un solo user
 async def user(user: User):
-    users_list.append(user)
+
+
+    if type(serach_user(user.id)) == User:
+        return {"error": "Usuario ya existente"}
+    else:
+        users_list.append(user)
+    
 
     return {
         "message": "Usuario creado exitosamente, gracias por tu JSON que pasamos a objeto User",
         "user": user
     }
+
+#Operacion con peticion PUT (actualizar)
+@app.put("/updateuser/")
+async def user(user: User):
+
+    found = False
+    for index, saved_user in enumerate(users_list):
+        if saved_user.id == user.id:
+            users_list[index] = user 
+            found = True
+            return {"message": "Usuario encontrado y actulizado"}, user
+
+    if not found:
+        return {"message": "Usuario no encontrado y no pudo ser actualizado"}
+
+#Operacion con peticion DELETE
+@app.delete("/deleteuser/{id}")
+async def user(id: int ):
+
+    found = False
+
+
+    for index, saved_user in enumerate(users_list):
+        if saved_user.id == id:
+            del users_list[index]
+            found = True
+            return {"message": "Usuario eliminado correctamente"}
+
+    if not found:
+        {"error": "No se ha encontrado el usuario"}
+    
 
 
 def serach_user(id: int):
